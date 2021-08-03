@@ -25,35 +25,36 @@ extern "C" {
 #endif /* __cplusplus */
 #endif /* __cplusplus */
 
-#define CONFIG_UART0_BAUDRATE   115200
+#define CONFIG_UART1_BAUDRATE   115200
 #define CONFIG_UART_CLK_INPUT   (24000000) // 24M or 6M
 
-#define UART0                   0
+
 #define UART1                   1
 #define UART2                   2
 #define UART3                   3
+#define UART4                   4
 
-#define UART0_ENABLE  1
+#define UART4_ENABLE  1
 #define UART1_ENABLE  1
 #define UART2_ENABLE  1
 #define UART3_ENABLE  1
 
-#define UART0_DMA_RX_PERI       16
-#define UART1_DMA_RX_PERI       18
-#define UART2_DMA_RX_PERI       20
-#define UART3_DMA_RX_PERI       22
+#define UART1_DMA_RX_PERI       16
+#define UART2_DMA_RX_PERI       18
+#define UART3_DMA_RX_PERI       20
+#define UART4_DMA_RX_PERI       22
 
 #define uart_pin_mux_cfg(uart_num) ({ \
-        if (UART0 == uart_num) {} \
-        else if (UART1 == uart_num) { \
+        if (UART1 == uart_num) {} \
+        else if (UART2 == uart_num) { \
         WRITE_UINT16(0x01, IO_MUX_REG_BASE + 0x07C); \
         WRITE_UINT16(0x01, IO_MUX_REG_BASE + 0x084); \
         } \
-        else if (UART2 == uart_num) { \
+        else if (UART3 == uart_num) { \
         WRITE_UINT16(0x01, IO_MUX_REG_BASE + 0x088); \
         WRITE_UINT16(0x01, IO_MUX_REG_BASE + 0x08C); \
         } \
-        else if (UART3 ==uart_num) { \
+        else if (UART4 ==uart_num) { \
         WRITE_UINT16(0x02, IO_MUX_REG_BASE + 0x078); \
         WRITE_UINT16(0x02, IO_MUX_REG_BASE + 0x080); \
         } \
@@ -69,29 +70,26 @@ extern "C" {
         })
 #define  get_uart_dma_peri(uart_num) ({ \
         unsigned int peri_num = -1; \
-        if (UART0 == uart_num) \
-        peri_num = UART0_DMA_RX_PERI; \
-        else if (UART1 == uart_num) \
+        if (UART1 == uart_num) \
         peri_num = UART1_DMA_RX_PERI; \
         else if (UART2 == uart_num) \
         peri_num = UART2_DMA_RX_PERI; \
         else if (UART3 == uart_num) \
         peri_num = UART3_DMA_RX_PERI; \
+        else if (UART4 == uart_num) \
+        peri_num = UART4_DMA_RX_PERI; \
         peri_num; \
         })
 
 
 #define TTYS0                               "/dev/ttyS0"
 
-#define CONSOLE_UART                        UART0
+#define CONSOLE_UART                        UART1
 
 #define CONSOLE_UART_BAUDRATE               115200
 #define UART_NUM    4
-#if (CONSOLE_UART == UART0)
-#define TTY_DEVICE                "/dev/uartdev-0"
-#define UART_REG_BASE             UART0_REG_BASE
-#define NUM_HAL_INTERRUPT_UART    NUM_HAL_INTERRUPT_UART0
-#elif (CONSOLE_UART == UART1)
+
+#if (CONSOLE_UART == UART1)
 #define TTY_DEVICE                "/dev/uartdev-1"
 #define UART_REG_BASE             UART1_REG_BASE
 #define NUM_HAL_INTERRUPT_UART    NUM_HAL_INTERRUPT_UART1
@@ -103,6 +101,10 @@ extern "C" {
 #define TTY_DEVICE                "/dev/uartdev-3"
 #define UART_REG_BASE             UART3_REG_BASE
 #define NUM_HAL_INTERRUPT_UART    NUM_HAL_INTERRUPT_UART3
+#elif (CONSOLE_UART == UART4)
+#define TTY_DEVICE                 "/dev/uartdev-4"
+#define UART_REG_BASE              UART4_REG_BASE
+#define NUM_HAL_INTERRUPT_UART     NUM_HAL_INTERRUPT_UART4
 #endif
 
 #ifdef LOSCFG_PLATFORM_HISI_AMP

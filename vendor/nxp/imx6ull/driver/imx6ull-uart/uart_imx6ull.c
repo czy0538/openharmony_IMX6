@@ -45,7 +45,7 @@ STATIC VOID UartPutcReg(UINTPTR base, CHAR c)
 	UART_Type *uartRegs = (UART_Type *)base;
 
 	while (!((uartRegs->USR2) & (1<<3))); /*等待上个字节发送完毕*/
-	uartRegs->UTXD = (unsigned char)c;		
+	uartRegs->UTXD = (unsigned char)c;
 
 }
 
@@ -123,7 +123,7 @@ static irqreturn_t imx6ull_uart_irq(int irq, void *data)
 	struct uart_driver_data *udd = (struct uart_driver_data *)data;
 	UART_Type *uartRegs;
     uint32_t status;
-	
+
 	if (udd == NULL) {
 		uart_error("udd is null!\n");
 		return IRQ_HANDLED;
@@ -152,7 +152,7 @@ static irqreturn_t imx6ull_uart_irq(int irq, void *data)
 		//PRINT_RELEASE("%s %s %d, udd->recv %d, %s\n", __FILE__, __FUNCTION__, __LINE__, count, buf);
         udd->recv(udd, buf, count);
     }
-	
+
 end:
 	/* clear all interrupt */
 	return 0;
@@ -161,10 +161,11 @@ end:
 
 static int imx6ull_config_in(struct uart_driver_data *udd)
 {
+	//配置串口
 	return 0;
 }
 
-static int imx6ull_startup(struct uart_driver_data *udd) 
+static int imx6ull_startup(struct uart_driver_data *udd)
 {
 	int ret = 0;
 	struct imx6ull_port *port = NULL;
@@ -180,21 +181,21 @@ static int imx6ull_startup(struct uart_driver_data *udd)
 		uart_error("port is null!");
 		return -EFAULT;
 	}
-	
+
 	uartRegs = (UART_Type *)port->phys_base;
-	
+
 	/* enable the clock */
 	LOS_TaskLock();
 	//uart_clk_cfg(udd->num, true); //use for hi3518
 	LOS_TaskUnlock();
-	
-	
+
+
 	uartRegs = (UART_Type *)port->phys_base;
-	
+
     /* enable the clock */
     /* uart disable */
 	uartRegs->UCR1 &= ~(1<<0);
-	
+
     /* clear all interrupt,set mask */
     /* mask all interrupt */
 
@@ -223,7 +224,7 @@ static int imx6ull_startup(struct uart_driver_data *udd)
 	 * [0]  : DREN, Receive Data Ready Interrupt Enable
 	 */
 	uartRegs->UCR4 &= ~((1<<8)|(1<<7)|(1<<6)|(1<<3)|(1<<2)|(1<<1)|(1<<0));
-	
+
 
 	ret = request_irq(port->irq_num, (irq_handler_t)imx6ull_uart_irq,
 							  0, "uart_dw", udd);
@@ -233,7 +234,7 @@ static int imx6ull_startup(struct uart_driver_data *udd)
 
 	/* enable uart */
 	uartRegs->UCR1 |= (1<<0);
-	
+
 	imx6ull_config_in(udd);
 
 	return ret;
@@ -241,6 +242,7 @@ static int imx6ull_startup(struct uart_driver_data *udd)
 
 static int imx6ull_shutdown(struct uart_driver_data *udd)
 {
+	//释放串口
 	return 0;
 }
 
@@ -318,7 +320,7 @@ static int imx6ull_attach(device_t self)
 	if (!res) {
 		goto err;
 	}
-	
+
 	port->irq_num = res->start;
 	if (port->irq_num == LOS_NOK) {
 		goto err;
@@ -378,7 +380,7 @@ static int imx6ull_detach(device_t self)
 	return 0;
 }
 
-static device_method_t uart_methods[] = 
+static device_method_t uart_methods[] =
 {
 	/* Device interface */
 	DEVMETHOD(device_probe, imx6ull_probe),
@@ -388,7 +390,7 @@ static device_method_t uart_methods[] =
 	DEVMETHOD_END
 };
 
-static driver_t uart_driver = 
+static driver_t uart_driver =
 {
 	.name = "uart",
 	.methods = uart_methods,

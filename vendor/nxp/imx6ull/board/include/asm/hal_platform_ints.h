@@ -62,10 +62,12 @@ extern "C" {
 #define NUM_HAL_INTERRUPT_TIMER1        37
 #define NUM_HAL_INTERRUPT_TIMER2        38
 #define NUM_HAL_INTERRUPT_TIMER3        38
-
-#define NUM_HAL_INTERRUPT_UART0         58
-#define NUM_HAL_INTERRUPT_UART1         40
-#define NUM_HAL_INTERRUPT_UART2         41
+//uart中断号
+#define NUM_HAL_INTERRUPT_UART1         58  //IMX6ULL UART1
+#define NUM_HAL_INTERRUPT_UART2         59  //IMX6ULL UART2,
+#define NUM_HAL_INTERRUPT_UART3         60
+#define NUM_HAL_INTERRUPT_UART4         61
+#define NUM_HAL_INTERRUPT_UART5         62
 
 #define NUM_HAL_INTERRUPT_GPIO0         48
 #define NUM_HAL_INTERRUPT_GPIO1         49

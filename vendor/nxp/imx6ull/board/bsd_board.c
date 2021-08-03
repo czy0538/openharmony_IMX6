@@ -46,14 +46,20 @@ static struct uart_softc uart0_softc = { /*lint !e10 !e129*/
     } while (0)
 
 // callback never be null pointer
-static void uart_add_device(add_res_callback_t callback)
+static void uart_add_device(add_res_callback_t callback)//指定资源
 {
     device_t uart_dev;
     UART_ADD_DEVICE(uart_dev, 0);
+    /*之前在uart0上，实际上为uart1
     callback("uart", SYS_RES_MEMORY, 0, UART0_REG_PBASE,
         UART0_REG_PBASE + UART_IOMEM_COUNT, UART_IOMEM_COUNT);//添加内存资源
     callback("uart", SYS_RES_IRQ, 0, NUM_HAL_INTERRUPT_UART0,//添加中断资源
         NUM_HAL_INTERRUPT_UART0, 1);
+    */
+    callback("uart", SYS_RES_MEMORY, 0, UART1_REG_PBASE,
+        UART1_REG_PBASE + UART_IOMEM_COUNT, UART_IOMEM_COUNT);//添加内存资源
+    callback("uart", SYS_RES_IRQ, 0, NUM_HAL_INTERRUPT_UART1,//添加中断资源
+        NUM_HAL_INTERRUPT_UART1, 1);
 
 }
 //#endif
